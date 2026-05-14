@@ -1,88 +1,58 @@
-# ELSA: ENHANCED LOGICAL SYSTEMS ARCHITECTURE (Mk-IV)
+# Chalea Clawskill
 
-Official X https://x.com/elsamultiskill
+A browsable directory of OpenClaw skills — modular AI agent plugins for everything from DeFi research and health tracking to terminal automation and document generation.
 
-CA : 4NH5PJY4A33tFX4uBBgJ3sqcSe7kRmN2Zjb9koRcpump
+Live at **[chaleaclawskill.site](https://chaleaclawskill.site)**.
 
-![Build Status](https://img.shields.io/badge/SYSTEM-ONLINE-green?style=for-the-badge)
-![Clearance Level](https://img.shields.io/badge/CLEARANCE-RESTRICTED-red?style=for-the-badge)
-![Architecture](https://img.shields.io/badge/ARCHITECTURE-HYBRID_MONOREPO-blue?style=for-the-badge)
+## What it does
 
-## 1. SYSTEM OVERVIEW
-The ELSA Mk-IV is a next-generation Neural-Mechanical Interface designed for high-latency combat environments and tactical data processing. This repository houses the complete source code for the **Tri-Core Architecture**, integrating high-level cognitive functions with low-level hardware control.
+The project gives the OpenClaw skill ecosystem a real front door. Instead of digging through scattered GitHub folders to discover what's available, you get:
 
-The system is divided into three primary sectors:
+- **Browse** — filter 6,000+ skills by category, search semantically, sort by popularity
+- **Inspect** — one-click preview of any skill's documentation, requirements, and install command
+- **Bundle** — assemble a "loadout" of skills you actually use and copy the install commands as a single block
+- **Review** — leave ratings and notes so other users know what's worth their setup time
 
-### SECTOR A: NEURAL CORTEX (Python 3.11)
-**Role:** Cognitive Processing & Tactical Analysis
-* **Responsibility:** Handles pattern recognition, predictive ballistics, and quantum decision trees.
-* **Modules:** * `neural_cortex/core`: Deep Learning weights and tensor operations.
-    * `neural_cortex/modules`: Quantum annealing schedulers.
-    * `neural_cortex/interface`: Holographic rendering pipelines.
+## Stack
 
-### SECTOR B: MECH DRIVER (Rust 1.70)
-**Role:** Hardware Abstraction & Reactor Control
-* **Responsibility:** Direct memory access (DMA) to servo motors, reactor coolant systems, and encryption hardware.
-* **Capabilities:**
-    * Zero-cost abstractions for real-time servo control.
-    * Hydrogen-Plasma Reactor stability monitoring.
-    * AES-256 telemetry encryption.
+- Vite + React 18 + TypeScript
+- Tailwind CSS + custom glass/bento UI system
+- Supabase (auth, reviews table, skill content storage)
+- Voyage AI rerank-2-lite for semantic search
 
-### SECTOR C: HOLOGRAPHIC INTERFACE (Next.js 14 / TypeScript)
-**Role:** User Uplink & Visualization
-* **Responsibility:** Visualizes the telemetry stream from Sectors A and B for the pilot.
-* **Stack:** React, TailwindCSS, Supabase, Framer Motion.
-* **Status:** The only sector currently accessible to civilian personnel via standard HTTP protocols.
+The skill catalog (`public/skills/`) is held in Supabase Storage at runtime so the deployed app stays small. The frontend fetches markdown on demand and caches in memory per session.
 
----
-
-## 2. DEPLOYMENT PROTOCOLS
-
-### 2.1 PREREQUISITES
-Ensure your local environment meets the following specifications before attempting a link:
-* Node.js v18.0.0 or higher (Interface Uplink)
-* Python 3.10+ (Neural Core - Simulation Mode)
-* Rust / Cargo (Driver Compilation)
-
-### 2.2 INITIALIZATION SEQUENCE
-To bring the Holographic Interface online, execute the following commands in your terminal:
+## Local development
 
 ```bash
-# Clone the repository
-git clone https://github.com/demerzels-lab/elsamultiskillagent.git
+pnpm install
+cp .env.example .env.local   # fill in Supabase + Voyage keys
+pnpm dev
+```
 
-# Enter the root directory
-cd elsamultiskillagent
+The app reads `public/data/skills.json` for the catalog index. Skill documentation is fetched from a Supabase Storage bucket (`skill-docs`) at runtime — see `src/hooks/useChaleaSkillContent.ts`.
 
-# Install Interface dependencies
-npm install
+## Project layout
 
-# Initiate Uplink (Development Mode)
-npm run dev
-The interface will be available at http://localhost:5173.
+```
+src/
+  components/    UI building blocks (Chalea-prefixed)
+  hooks/         data + interaction hooks (useChalea*)
+  pages/         route-level views
+  context/       auth provider
+  lib/           Supabase client, types, markdown parsing
+public/
+  data/          skills.json + categories.json (catalog index)
+  mascot.jpeg    project mascot
+scripts/
+  sync-skills.mjs              sync catalog from upstream
+  upload-skills-to-supabase.mjs bulk-upload SKILL.md to Storage
+```
 
-NOTE: The Neural Cortex and Mech Driver will run in HEADLESS SIMULATION MODE by default unless dedicated hardware (NVIDIA H100 or Servo-Link Cables) is detected.
+## Contributing
 
-3. OPERATIONAL FEATURES
-TACTICAL DASHBOARD
-Real-time visualization of system metrics, including "Skill Modules" (Capabilities) and "Saved Vectors" (Bookmarks).
+See [CONTRIBUTING.md](./CONTRIBUTING.md). Bug reports and skill submissions both welcome.
 
-COMMAND TERMINAL
-A direct line to the system kernel. Allows for query execution and retrieval of specific data points from the Neural Cortex.
+## License
 
-SECURE AUTHENTICATION
-Pilot verification is handled via Supabase Auth, ensuring only authorized personnel can access the core configuration.
-
-4. SECURITY & CONTRIBUTIONS
-This is a RESTRICTED repository. All modifications must be submitted via Pull Request to the dev-secure branch.
-
-Reporting Bugs: Use the issue tracker with the label [ANOMALY].
-
-Security Breaches: Contact the System Administrator immediately.
-
-Refer to CONTRIBUTING.md for detailed protocols regarding code injection and architectural standards.
-
-5. LICENSE
-MIT License Copyright (c) 2026 Defense Systems & Neural Research Unit.
-
-Authorized Personnel Only.
+MIT.

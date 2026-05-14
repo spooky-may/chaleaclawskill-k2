@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..')
 const SKILLS_DIR = join(ROOT, 'public', 'skills')
 const BUCKET = 'skill-docs'
-const CONCURRENCY = 16
+const CONCURRENCY = 4
 
 function loadEnv() {
   const envPath = join(ROOT, '.env.local')

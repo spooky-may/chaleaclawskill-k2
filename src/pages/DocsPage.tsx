@@ -54,9 +54,9 @@ export function DocsPage() {
             <section id="getting-started" className="mb-16 scroll-mt-24">
               <h1 className="text-3xl font-bold mb-6">Getting Started</h1>
               <p className="text-text-secondary mb-6">
-                Welcome to Elsamultiskill, the comprehensive directory for OpenClaw AI agent skills.
-                This guide will help you get started with discovering, installing, and using skills
-                to enhance your AI agents.
+                Welcome to Chalea Clawskill — a directory for OpenClaw AI agent skills.
+                This guide walks through discovering, installing, and using skills to extend
+                your AI agents.
               </p>
               <div className="card p-6 bg-brand/5 border-brand/20">
                 <h3 className="font-semibold mb-2">What are OpenClaw Skills?</h3>

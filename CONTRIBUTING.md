@@ -1,41 +1,60 @@
-# CONTRIBUTION PROTOCOL v4.2
+# Contributing
 
-## 1. OVERVIEW
-This repository hosts the source code for the Mk-IV Neural-Mechanical Interface. Due to the sensitive nature of the hardware control layers (Rust) and the cognitive processing units (Python), all contributions must adhere to strict quality control standards. Unauthorized or unstable code injection will result in immediate rejection.
+Thanks for taking the time. Below is the working agreement for this repo — keep it simple, keep it shipping.
 
-## 2. SECURITY CLEARANCE & REPORTING
-Security anomalies or critical system failures must be reported via encrypted channels immediately. Do not disclose vulnerability details in public channels.
+## Reporting bugs
 
-### 2.1 ANOMALY REPORTING (ISSUES)
-When filing a report, ensure the following telemetry is included:
-* Kernel Version (Target Environment)
-* Neural Node Load (Memory Dump)
-* Reproduction Steps (Vector Sequence)
+Open an issue with:
+- What you tried (steps)
+- What happened
+- What you expected
+- Browser + OS
 
-## 3. SUBMISSION GUIDELINES (PULL REQUESTS)
-All patches must be submitted via Pull Request (PR) to the `dev-secure` branch. Direct commits to `main` are prohibited by hardware safety interlocks.
+Screenshots help. A minimal repro link helps more.
 
-### 3.1 CODING STANDARDS
-Contributors are expected to adhere to the following architecture-specific protocols:
+## Suggesting features
 
-#### A. NEURAL CORTEX (Python)
-* **Type Safety:** Strict type hinting (`typing`) is mandatory for all vector processing units.
-* **Async I/O:** All neural networking operations must be non-blocking.
-* **Documentation:** Docstrings must explain the tactical utility of the function.
+Open an issue prefixed `feat:` and describe the user-facing outcome before the implementation. If you're not sure it fits the project, ask first — saves both of us a rebuild.
 
-#### B. MECH DRIVER (Rust)
-* **Memory Safety:** `unsafe` blocks are strictly prohibited without L4 authorization.
-* **Concurrency:** Use `tokio` runtime for all hardware polling loops.
-* **Error Handling:** Panics are unacceptable in the kernel space. Use `Result<T, E>` propagation.
+## Pull requests
 
-#### C. INTERFACE LAYER (Next.js)
-* **Performance:** UI rendering must maintain 60 FPS under heavy load.
-* **Clean Architecture:** strictly separate view logic from system telemetry.
+1. Fork, branch from `main` (use `feat/`, `fix/`, or `chore/` prefixes)
+2. Run `pnpm lint` and `pnpm build` locally — both must pass
+3. Keep diffs focused. One feature or fix per PR.
+4. Match the existing style; don't reformat unrelated files
+5. If you're touching a component already named `Chalea*`, keep that prefix
 
-## 4. REVIEW PROCESS
-1.  **Static Analysis:** Automated drones will verify syntax integrity.
-2.  **Simulation:** Code will be tested in the virtual ballistics environment.
-3.  **Manual Review:** Senior engineers will verify architectural compliance.
+## Commit messages
 
-## 5. LEGAL
-By submitting a patch, you grant the governing entity an irrevocable license to use, modify, and deploy the code in active theaters of operation.
+Conventional commits, lowercase subject, present tense:
+
+```
+feat: add bundle export to clipboard
+fix: skill drawer closes on outside click
+refactor: split useChaleaSkills into list/filter/search
+docs: clarify supabase env vars in README
+```
+
+No need to mention which file. The diff already shows it.
+
+## Code style
+
+- TypeScript strict on. No `any` in new code unless there's a real reason in a comment.
+- Hooks: `useChalea*` prefix for project-specific state. Plain `use*` for generic helpers.
+- Components: functional + hooks. No new class components unless you have a strong case.
+- Tailwind: prefer composing utility classes over writing CSS. Custom CSS lives in `src/index.css`.
+- One blank line between logical blocks. Don't golf the spacing.
+
+## Skill submissions
+
+If you've built an OpenClaw skill you want surfaced in the catalog:
+
+1. Make sure it's published in the canonical OpenClaw registry
+2. Open a PR adding the slug to `public/data/skills.json` with the right metadata
+3. CI will validate the schema; if upstream `SKILL.md` is missing, the PR will fail
+
+For now there's no in-app submission flow — that's tracked in [ROADMAP.md](./ROADMAP.md) under v0.4.
+
+## Questions
+
+Open an issue with the `question` label.

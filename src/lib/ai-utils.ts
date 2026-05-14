@@ -60,7 +60,7 @@ export async function sendMessageToAI(messages: ChatMessage[]): Promise<string> 
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "HTTP-Referer": window.location.origin, // Required by OpenRouter
-        "X-Title": "Elsa Agent Protocol",      // Optional: App name
+        "X-Title": "Chalea Clawskill",         // Optional: App name
         "Content-Type": "application/json"
       },
       body: JSON.stringify({

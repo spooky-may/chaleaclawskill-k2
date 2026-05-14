@@ -9,9 +9,9 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: 'What is Elsamultiskill?',
+    question: 'What is Chalea Clawskill?',
     answer:
-      'Elsamultiskill is a comprehensive directory for OpenClaw AI agent skills. It provides a searchable catalog of over 1700 skills that can be installed to enhance AI agents with additional capabilities, from web development to automation and beyond.',
+      'Chalea Clawskill is a directory for OpenClaw AI agent skills. It catalogs over 6,000 skills that can be installed to extend AI agents — from web development and automation to DeFi research and health tracking.',
   },
   {
     question: 'How do I install a skill?',
@@ -19,9 +19,9 @@ const faqs: FAQItem[] = [
       'Installing a skill is simple. Find the skill you want, copy the install command (e.g., "npx clawhub@latest install skill-name"), and run it in your terminal. The skill will be automatically downloaded and configured for your AI agent.',
   },
   {
-    question: 'Is Elsamultiskill free to use?',
+    question: 'Is Chalea Clawskill free to use?',
     answer:
-      'Yes, Elsamultiskill is completely free to use. All skills listed in the directory are open-source and available at no cost. You can browse, search, and install any skill without any payment or subscription.',
+      'Yes — completely free. All skills listed are open-source. Browse, search, and install without payment or subscription.',
   },
   {
     question: 'Do I need to create an account?',
@@ -110,7 +110,7 @@ export function FAQPage() {
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h1>
           <p className="text-text-secondary">
-            Find answers to common questions about Elsamultiskill and OpenClaw skills.
+            Find answers to common questions about Chalea Clawskill and OpenClaw skills.
           </p>
         </div>
 

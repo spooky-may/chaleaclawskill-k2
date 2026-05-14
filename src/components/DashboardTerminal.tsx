@@ -4,7 +4,7 @@ import { Terminal, Minus, Square, X } from 'lucide-react'
 export function DashboardTerminal() {
   const [input, setInput] = useState('')
   const [history, setHistory] = useState<string[]>([
-    "Initializing Elsa Agent Protocol v2.0...",
+    "Initializing Chalea Clawskill v0.3...",
     "Loading skill registry... [OK]",
     "Connecting to neural knowledge base... [CONNECTED]",
     "System ready. Type 'help' to see available commands."
@@ -52,7 +52,7 @@ export function DashboardTerminal() {
         <div className="flex items-center justify-between px-4 py-3 bg-white/5 border-b border-white/10">
           <div className="flex items-center gap-3 text-white/40">
             <Terminal className="w-4 h-4 text-primary" />
-            <span className="text-xs font-medium tracking-wide">user@elsa-agent: ~</span>
+            <span className="text-xs font-medium tracking-wide">user@chalea: ~</span>
           </div>
           <div className="flex items-center gap-2 opacity-50">
             <Minus className="w-3 h-3 hover:text-white cursor-pointer" />
