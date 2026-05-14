@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import type { Skill } from '../lib/types'
 import { useChaleaSkillContent } from '../hooks/useChaleaSkillContent'
+import { ChaleaMarkdownSkeleton } from './ChaleaMarkdownSkeleton'
 
 interface ChaleaSkillDrawerProps {
   skill: Skill
@@ -88,7 +89,12 @@ export function ChaleaSkillDrawer({ skill, open, onOpenChange }: ChaleaSkillDraw
 
             {/* Requirements (Priority 2) */}
             {content.status === 'loading' && (
-              <div className="px-6 py-4 text-sm text-[#71717a] animate-pulse">Loading skill content...</div>
+              <div className="px-6 pb-6">
+                <p className="text-[11px] text-[#71717a] uppercase tracking-[0.15em] font-medium mb-3">Loading documentation</p>
+                <div className="bento-card p-4">
+                  <ChaleaMarkdownSkeleton />
+                </div>
+              </div>
             )}
 
             {hasRequirements && (

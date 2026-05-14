@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Skill catalog data — fetched from Supabase Storage at runtime
+# Kept on local disk for development but not tracked in git
+public/skills/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

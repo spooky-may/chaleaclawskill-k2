@@ -18,6 +18,7 @@ import { useAuth } from '../context/AuthContext'
 import { useChaleaBookmarks } from '../hooks/useChaleaBookmarks'
 import { useChaleaSkillContent } from '../hooks/useChaleaSkillContent'
 import { ChaleaReviewSection } from '../components/ChaleaReviewSection'
+import { ChaleaMarkdownSkeleton } from '../components/ChaleaMarkdownSkeleton'
 import { LoadingSpinner } from '../components/Loading'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -162,10 +163,12 @@ export function SkillDetailPage() {
 
           {/* Markdown body */}
           {content.status === 'loading' && (
-            <div className="flex items-center gap-3 text-sm text-[#71717a]">
-              <LoadingSpinner size="sm" />
-              Loading documentation...
-            </div>
+            <section>
+              <h3 className="text-xs font-semibold text-[#09090b] uppercase tracking-[0.15em] mb-4">Documentation</h3>
+              <div className="bento-card p-6">
+                <ChaleaMarkdownSkeleton />
+              </div>
+            </section>
           )}
 
           {body && (
