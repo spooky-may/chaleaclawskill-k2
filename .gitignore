@@ -16,6 +16,11 @@ dist-ssr
 # Kept on local disk for development but not tracked in git
 public/skills/
 
+# Local-only tooling (not part of the deployed app)
+scripts/zauth-*
+scripts/__pycache__/
+ZAUTH_PLAYBOOK.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
