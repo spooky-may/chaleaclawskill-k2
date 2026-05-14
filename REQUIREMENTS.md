@@ -1,8 +1,8 @@
-# ELSA — Upgrade Roadmap Summary
+# Chalea Clawskill — Feature Roadmap
 
-**Project:** elsamultiskillagent (elsamultiskillagent.site)  
-**Stack:** React + Vite + TypeScript + Supabase + Radix UI + ECharts  
-**Scope:** 7 core upgrades + 2 optional infra
+**Project:** Chalea Clawskill (chaleaclawskill.site)  
+**Stack:** React + Vite + TypeScript + Supabase + Radix UI  
+**Scope:** 7 core features + 2 optional infrastructure items
 
 ---
 

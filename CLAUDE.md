@@ -64,7 +64,6 @@ For multi-step tasks, state a brief plan:
 
 **Project name:** Chalea Clawskill Agent
 **Domain:** chaleaclawskill.site
-**Derived from:** elsamultiskillagent (leluhur)
 **Zauth target:** ≥ 70
 **Stack:** Vite + React + Tailwind + TypeScript + Supabase + Radix UI
 
@@ -211,7 +210,7 @@ Divergence tactics to apply:
 - Custom hooks with project-specific names (prefix: `useChalea`)
 - Utility functions named to project context
 - Component naming convention: `Chalea[ComponentName]`
-- Do NOT copy component structure 1:1 from Elsa/Arwen without renaming + restructuring
+- Apply structural variance: rename, restructure, split, invert helpers. Don't ship templates unchanged.
 
 Do NOT add dummy/disconnected code. All divergence must be logically coherent in project context.
 
