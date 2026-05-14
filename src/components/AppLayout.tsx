@@ -1,36 +1,37 @@
 import { ReactNode, useState } from 'react'
-import { Sidebar } from './Sidebar'
-import { Link } from 'react-router-dom'
+import { ChaleaSidebar } from './Sidebar'
+import { ChaleaInteractiveBg } from './ChaleaInteractiveBg'
+import { Link, useLocation } from 'react-router-dom'
 import { Menu, X, Terminal } from 'lucide-react'
-import { InteractiveBackground } from './InteractiveBackground'
 
 interface AppLayoutProps {
   children: ReactNode
 }
 
-export function AppLayout({ children }: AppLayoutProps) {
+export function ChaleaAppLayout({ children }: AppLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const location = useLocation()
 
   return (
-    <div className="min-h-screen text-white font-sans selection:bg-primary/30 relative">
-      
-      {/* Background Layer */}
-      <InteractiveBackground />
+    <div className="min-h-screen bg-[#f3f4f7] text-[#09090b] font-sans selection:bg-sky-100 relative dot-grid">
+
+      {/* Interactive background — parallax orbs + particles + geometry */}
+      <ChaleaInteractiveBg />
 
       {/* Desktop Sidebar */}
-      <Sidebar />
+      <ChaleaSidebar />
 
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 border-b border-white/10 bg-black/80 backdrop-blur-xl z-50 flex items-center px-4 justify-between">
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 border-b border-black/6 glass-nav z-50 flex items-center px-4 justify-between">
         <Link to="/" className="flex items-center gap-3 font-bold">
-           <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-             <Terminal className="w-4 h-4 text-primary" />
-           </div>
-           <span className="text-white font-semibold">Elsa</span>
+          <div className="w-8 h-8 rounded-[6px] bg-sky-500 flex items-center justify-center">
+            <Terminal className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-[#09090b] font-semibold tracking-tight">Chalea</span>
         </Link>
-        <button 
+        <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2 text-white/60 hover:text-white transition-colors"
+          className="p-2 text-[#71717a] hover:text-[#09090b] transition-colors"
         >
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
@@ -38,19 +39,35 @@ export function AppLayout({ children }: AppLayoutProps) {
 
       {/* Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black pt-20 px-4 animate-fade-in">
-           <div className="flex flex-col gap-4">
-              <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-white/80">Dashboard</Link>
-              <Link to="/browse" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-white/80">Browse Skills</Link>
-              <Link to="/bookmarks" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-white/80">Bookmarks</Link>
-           </div>
+        <div className="lg:hidden fixed inset-0 z-40 bg-white/95 backdrop-blur-[8px] pt-20 px-4 animate-fade-in">
+          <div className="flex flex-col gap-2">
+            {[
+              { to: '/dashboard', label: 'Dashboard' },
+              { to: '/browse', label: 'Browse Skills' },
+              { to: '/bookmarks', label: 'Bookmarks' },
+              { to: '/docs', label: 'Documentation' },
+              { to: '/faq', label: 'FAQ' },
+            ].map(link => (
+              <Link
+                key={link.to}
+                to={link.to}
+                onClick={() => setMobileMenuOpen(false)}
+                className="px-4 py-3 text-base font-medium text-[#09090b] hover:bg-black/4 rounded-[4px] transition-colors border border-transparent hover:border-black/6"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Main Content Area */}
+      {/* Main Content — keyed by route for page transition */}
       <main className="flex-1 lg:pl-72 pt-16 lg:pt-0 min-h-screen relative z-10">
-        <div className="p-4 md:p-8 lg:p-12 max-w-7xl mx-auto animate-in fade-in duration-500">
-           {children}
+        <div
+          key={location.pathname}
+          className="p-4 md:p-8 lg:p-12 max-w-7xl mx-auto animate-page-enter"
+        >
+          {children}
         </div>
       </main>
     </div>

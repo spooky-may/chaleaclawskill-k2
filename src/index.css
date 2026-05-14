@@ -4,31 +4,284 @@
 
 @layer base {
   :root {
-    --primary: 24 98% 55%; 
-    --accent: 42 100% 60%;
+    /* Primary: sage-teal from mascot eyes — 178° 30% 50% */
+    --primary: 178 30% 50%;
+    /* Accent: soft silver-lavender from the robe */
+    --accent: 248 18% 78%;
+    --font-sans: 'IBM Plex Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
   }
-  body { @apply bg-[#050505] text-white antialiased overflow-x-hidden; }
+
+  html {
+    /* Pearl-cool background — closer to the mascot's cool-grey atmosphere */
+    background-color: #f3f4f7;
+  }
+
+  body {
+    @apply text-[#09090b] antialiased overflow-x-hidden;
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+    background-color: #f3f4f7;
+  }
+
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(82,170,167,0.18); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(82,170,167,0.32); }
 }
 
-/* Mecha Technical Textures */
-.bg-grid-mecha {
-  background-image: 
-    linear-gradient(to right, rgba(251, 146, 60, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(251, 146, 60, 0.08) 1px, transparent 1px);
-  background-size: 60px 60px;
+@layer components {
+  /* White-glass card — same structure, updated hover glow to teal */
+  .bento-card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 4px;
+    transition: transform 0.2s cubic-bezier(0.2,0,0,1),
+                box-shadow 0.2s cubic-bezier(0.2,0,0,1),
+                border-color 0.2s cubic-bezier(0.2,0,0,1),
+                background 0.2s cubic-bezier(0.2,0,0,1);
+  }
+
+  .bento-card:hover {
+    background: rgba(255,255,255,0.90);
+    /* Teal-tinted border on hover — echoes the mascot eye accent */
+    border-color: rgba(82,170,167,0.22);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(82,170,167,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  /* Glass nav — cool silver tint */
+  .glass-nav {
+    background: rgba(243,244,247,0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-color: rgba(0,0,0,0.06);
+  }
+
+  /* Dot grid — silver mist dots (matches mascot background texture) */
+  .dot-grid {
+    background-image: radial-gradient(circle, rgba(148,150,175,0.12) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+
+  /* Halftone divider — silver-lavender shimmer (from the robe) */
+  .halftone-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #b8bcd0 20%, #c4c2d8 60%, #b8bcd0 80%, transparent);
+    opacity: 0.55;
+  }
+
+  /* Primary button — sage-teal */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5;
+    background: hsl(var(--primary));
+    color: white;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    border: none;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    background: hsl(178 30% 42%);
+    box-shadow: 0 0 0 3px rgba(82,170,167,0.18);
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-6 py-2.5;
+    background: transparent;
+    color: #09090b;
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.12);
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .btn-ghost:hover {
+    background: rgba(82,170,167,0.06);
+    border-color: rgba(82,170,167,0.28);
+  }
+
+  /* Legacy class aliases used by DocsPage + FAQPage */
+  .card {
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 6px;
+    padding: 1.5rem;
+  }
+
+  .code-block {
+    background: #09090b;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    overflow-x: auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .text-brand          { color: #52aaa7; }
+  .text-text-primary   { color: #09090b; }
+  .text-text-secondary { color: #71717a; }
+  .text-text-tertiary  { color: #a1a1aa; }
+  .border-border-subtle{ border-color: rgba(0,0,0,0.06); }
+  .bg-surface          { background: rgba(255,255,255,0.72); }
+  .bg-surface-hover    { background: rgba(0,0,0,0.03); }
 }
 
-.bg-hex-mecha {
-  background-color: transparent;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cpath fill='%23fb923c' fill-opacity='0.03' d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.91v12.18l10.99 6.34 11-6.34V17.91l-11-6.34L3 17.91z'/%3E%3C/svg%3E");
+/* ── Ambient interactive background orbs ──────────────────────────────────── */
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: 0.55;
+  animation: orb-drift 18s ease-in-out infinite alternate;
 }
 
-.reflection-floor {
-  mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-  -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black 80%, transparent);
-  perspective: 1000px;
+.ambient-orb-teal {
+  width: 480px;
+  height: 320px;
+  background: radial-gradient(ellipse, rgba(82,170,167,0.18) 0%, transparent 70%);
+  top: -80px;
+  left: -60px;
+  animation-duration: 22s;
 }
 
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.07'/%3E%3C/svg%3E");
+.ambient-orb-silver {
+  width: 400px;
+  height: 260px;
+  background: radial-gradient(ellipse, rgba(180,176,210,0.15) 0%, transparent 70%);
+  bottom: 5%;
+  right: -40px;
+  animation-duration: 28s;
+  animation-direction: alternate-reverse;
+}
+
+@keyframes orb-drift {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(30px, -20px) scale(1.05); }
+  66%  { transform: translate(-20px, 30px) scale(0.97); }
+  100% { transform: translate(15px, -10px) scale(1.02); }
+}
+
+/* ── Floating particles (anime magic dust) ─────────────────────────────────── */
+.chalea-particle {
+  position: absolute;
+  bottom: -8px;
+  border-radius: 50%;
+  opacity: 0;
+  animation: particle-rise linear infinite;
+}
+
+.chalea-particle-teal   { background: radial-gradient(circle, rgba(82,170,167,0.9), rgba(82,170,167,0.2)); }
+.chalea-particle-silver { background: radial-gradient(circle, rgba(196,194,216,0.85), rgba(180,176,210,0.15)); }
+.chalea-particle-white  { background: radial-gradient(circle, rgba(255,255,255,0.95), rgba(240,240,248,0.1)); }
+
+@keyframes particle-rise {
+  0%   { transform: translateY(0) scale(1) rotate(0deg);     opacity: 0; }
+  8%   { opacity: 0.9; }
+  50%  { transform: translateY(-50vh) scale(0.8) rotate(120deg); opacity: 0.6; }
+  90%  { opacity: 0.2; }
+  100% { transform: translateY(-100vh) scale(0.3) rotate(240deg); opacity: 0; }
+}
+
+/* ── Page enter transition ─────────────────────────────────────────────────── */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+.animate-page-enter {
+  animation: page-enter 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes scan {
+  0% { transform: translateY(-10%); opacity: 0; }
+  20%, 80% { opacity: 0.6; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0,0); }
+  50% { transform: translate(40px,-30px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s cubic-bezier(0.16,1,0.3,1) both;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.animate-card-enter {
+  animation: card-enter 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Anime magic dust — light wave sweep ──────────────────────────────────── */
+@keyframes wave-light {
+  0%   { transform: translateY(-12%); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateY(112%); opacity: 0; }
+}
+
+/* ── Firefly twinkle — pulse in place ─────────────────────────────────────── */
+@keyframes twinkle {
+  0%, 100% { transform: scale(0.4) rotate(0deg);   opacity: 0;   }
+  20%       { transform: scale(1.3) rotate(30deg);  opacity: 0.9; }
+  50%       { transform: scale(0.8) rotate(60deg);  opacity: 0.5; }
+  80%       { transform: scale(1.1) rotate(20deg);  opacity: 0.7; }
+}
+
+/* ── Magic ring — expand & fade ───────────────────────────────────────────── */
+@keyframes ring-expand {
+  0%   { transform: scale(0.5);  opacity: 0.40; }
+  70%  { opacity: 0.12; }
+  100% { transform: scale(1.6);  opacity: 0;    }
 }

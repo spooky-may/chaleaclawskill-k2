@@ -1,20 +1,19 @@
-import { useSkills } from '../hooks/useSkills'
+import { useChaleaSkills } from '../hooks/useChaleaSkills'
 import { Link } from 'react-router-dom'
 import { DashboardTerminal } from '../components/DashboardTerminal'
 import { LoadingSpinner } from '../components/Loading'
-import { 
-  ArrowRight, 
-  Github, 
+import {
+  ArrowRight,
+  Github,
   Twitter,
-  Bot, 
-  Code, 
-  Zap, 
-  Cpu, 
-  Layers, 
-  BookOpen 
+  Bot,
+  Code,
+  Zap,
+  Cpu,
+  Layers,
+  BookOpen,
 } from 'lucide-react'
 
-// Helper to pick icons based on category name
 const getCategoryIcon = (name: string) => {
   const n = name.toLowerCase()
   if (n.includes('ai') || n.includes('agent')) return Bot
@@ -26,7 +25,7 @@ const getCategoryIcon = (name: string) => {
 }
 
 export function DashboardPage() {
-  const { skills, categories, loading } = useSkills()
+  const { skills, categories, loading } = useChaleaSkills()
 
   if (loading) {
     return (
@@ -36,174 +35,156 @@ export function DashboardPage() {
     )
   }
 
-  // Calculate stats based on available fields (id, name, category, etc.)
   const totalSkills = skills.length
   const totalCategories = categories.length
-  
-  // Logic fix: Filter based on category or name instead of 'tags'
-  const totalAgents = skills.filter(s => 
-    s.category.toLowerCase().includes('agent') || 
+  const totalAgents = skills.filter(s =>
+    s.category.toLowerCase().includes('agent') ||
     s.name.toLowerCase().includes('agent')
   ).length
-
-  // Treat the rest as commands/tools
   const totalCommands = totalSkills - totalAgents
 
   return (
-    <div className="space-y-16 lg:space-y-24">
-      
-      {/* 1. Hero Section */}
-      <section className="text-center space-y-8 max-w-4xl mx-auto pt-8 md:pt-12">
-        {/* Version Badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary shadow-[0_0_15px_rgba(var(--primary),0.15)] hover:shadow-[0_0_25px_rgba(var(--primary),0.25)] transition-shadow cursor-default animate-fade-in">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+    <div className="space-y-16 lg:space-y-20">
+
+      {/* Hero */}
+      <section className="max-w-4xl mx-auto pt-4 md:pt-8 space-y-8">
+
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-600 animate-fade-in uppercase tracking-wide">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-500" />
           </span>
-          <span className="font-medium tracking-wide">v2.0.0 Available Now</span>
+          v2.0.0 Available Now
         </div>
 
-        {/* Main Heading */}
-        <div className="space-y-6 animate-fade-in [animation-delay:200ms]">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.1] text-white">
-            Supercharge your<br />
-            <span className="bg-gradient-to-r from-primary via-white to-primary bg-[length:200%_auto] animate-shimmer bg-clip-text text-transparent">
-              AI Coding Agents
-            </span>
+        {/* Heading */}
+        <div className="space-y-4 animate-fade-in" style={{ animationDelay: '100ms' }}>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.1] text-[#09090b]">
+            Supercharge your{' '}
+            <span className="text-sky-500">AI Coding Agents</span>
           </h1>
-          <p className="text-xl text-white/50 leading-relaxed max-w-2xl mx-auto font-light">
-            A curated collection of <span className="text-white font-medium border-b border-primary/30 pb-0.5">{totalSkills} skills</span> and <span className="text-white font-medium border-b border-primary/30 pb-0.5">{totalCategories} categories</span> designed to extend the capabilities of modern AI coding assistants.
+          <p className="text-lg text-[#71717a] leading-relaxed max-w-2xl font-light">
+            A curated collection of{' '}
+            <span className="text-[#09090b] font-semibold">{totalSkills} skills</span> and{' '}
+            <span className="text-[#09090b] font-semibold">{totalCategories} categories</span>{' '}
+            designed to extend the capabilities of modern AI coding assistants.
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 pt-4 animate-fade-in [animation-delay:400ms]">
+        {/* Actions */}
+        <div className="flex flex-wrap gap-3 animate-fade-in" style={{ animationDelay: '200ms' }}>
           <Link to="/browse">
-            <button className="h-12 rounded-md bg-white text-black hover:bg-primary hover:text-black border-none shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(var(--primary),0.4)] font-bold px-8 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2">
-              Get Started 
-              <ArrowRight className="w-4 h-4" />
+            <button className="btn-primary">
+              Get Started
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </Link>
-          <a href="https://github.com/Demerzels-lab/elsamultiskillagent" target="_blank" rel="noopener noreferrer">
-            <button className="h-12 rounded-md px-6 bg-transparent border border-white/20 text-white hover:bg-white/5 hover:border-primary/50 hover:text-primary font-medium transition-all flex items-center gap-2">
-              <Github className="w-4 h-4" />
-              View on GitHub
+          <a href="https://github.com/spooky-may/chaleaclawskill" target="_blank" rel="noopener noreferrer">
+            <button className="btn-ghost">
+              <Github className="w-3.5 h-3.5" />
+              GitHub
             </button>
           </a>
-          <a href="https://x.com/elsamultiskill" target="_blank" rel="noopener noreferrer">
-            <button className="h-12 rounded-md px-6 bg-transparent border border-white/20 text-white hover:bg-white/5 hover:border-primary/50 hover:text-primary font-medium transition-all flex items-center gap-2">
-              <Twitter className="w-4 h-4" />
+          <a href="https://x.com/chaleaclawskill" target="_blank" rel="noopener noreferrer">
+            <button className="btn-ghost">
+              <Twitter className="w-3.5 h-3.5" />
               Follow on X
             </button>
           </a>
         </div>
       </section>
 
-      {/* 2. Interactive Terminal Section */}
-      <section className="relative animate-fade-in [animation-delay:600ms]">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent blur-3xl -z-10"></div>
-        <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold mb-3 text-white tracking-wide">Try it yourself</h2>
-          <p className="text-white/50">Experience the power of <span className="text-primary font-semibold">Elsa</span> directly in your browser.</p>
+      {/* Terminal */}
+      <section className="relative animate-fade-in" style={{ animationDelay: '300ms' }}>
+        <div className="text-center mb-8">
+          <h2 className="text-xl font-bold mb-2 text-[#09090b] tracking-wide uppercase text-xs tracking-[0.15em]">Try it yourself</h2>
+          <p className="text-[#71717a] text-sm">
+            Experience the power of{' '}
+            <span className="text-sky-600 font-semibold">Chalea Clawskill</span> directly in your browser.
+          </p>
         </div>
-        
         <DashboardTerminal />
       </section>
 
-      {/* 3. Stats Row */}
-      <section className="border-y border-white/5 py-12 bg-black/40 backdrop-blur-sm">
-        <div className="flex flex-col md:flex-row justify-around items-center gap-12 md:gap-0">
+      {/* Stats */}
+      <section className="bento-card py-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-black/6">
           <StatsItem number={totalSkills} label="Total Skills" />
-          <StatsItem number={totalAgents} label="Specialized Agents" />
-          <StatsItem number={totalCommands} label="Slash Commands" />
+          <StatsItem number={totalAgents} label="Agent Skills" />
+          <StatsItem number={totalCommands} label="Tool Skills" />
           <StatsItem number={totalCategories} label="Categories" />
         </div>
       </section>
 
-      {/* 4. Categories Grid */}
-      <section className="space-y-12">
-        <div className="flex items-center justify-between border-b border-white/10 pb-4">
+      {/* Categories */}
+      <section className="space-y-8">
+        <div className="flex items-center justify-between border-b border-black/6 pb-4">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-white">Explore by Category</h2>
-            <p className="text-white/40 mt-2 text-lg">Browse our curated collection of skills and tools</p>
+            <h2 className="text-2xl font-bold tracking-tight text-[#09090b]">Explore by Category</h2>
+            <p className="text-[#71717a] mt-1 text-sm">Browse our curated collection of skills and tools</p>
           </div>
-          <Link to="/browse" className="hidden md:flex items-center text-primary hover:text-accent transition-colors text-sm font-medium">
-            View all skills <ArrowRight className="ml-1 w-4 h-4" />
+          <Link to="/browse" className="hidden md:flex items-center gap-1 text-sky-600 hover:underline text-sm font-medium">
+            View all skills <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map((category) => (
-            <CategoryCard 
-              key={category.slug} 
-              category={category} 
-            />
+            <CategoryCard key={category.slug} category={category} />
           ))}
         </div>
       </section>
 
-      {/* Footer Note */}
-      <div className="text-center py-12 border-t border-white/5 mt-12 bg-gradient-to-b from-transparent to-primary/5 rounded-t-3xl">
-        <p className="text-sm text-white/30">
-          Built with precision by <span className="text-white/60 font-medium hover:text-primary transition-colors cursor-pointer">Elsa Team</span>
+      {/* Footer note */}
+      <div className="text-center py-8 border-t border-black/6">
+        <p className="text-xs text-[#71717a] uppercase tracking-[0.15em]">
+          Built with precision by{' '}
+          <span className="text-[#09090b] font-semibold">Chalea Team</span>
         </p>
       </div>
-
     </div>
   )
 }
 
-// --- Sub Components for Dashboard ---
-
-function StatsItem({ number, label }: { number: number, label: string }) {
+function StatsItem({ number, label }: { number: number; label: string }) {
   return (
-    <div className="flex flex-col items-center text-center w-full md:w-1/4 border-b md:border-b-0 md:border-r border-white/5 last:border-0 pb-8 md:pb-0 group">
-      <span className="text-5xl md:text-6xl font-bold text-white tracking-tighter mb-2 group-hover:text-primary transition-colors duration-500">
-        {number}
+    <div className="flex flex-col items-center text-center px-4 py-2 group">
+      <span className="text-4xl md:text-5xl font-bold text-[#09090b] tracking-tighter mb-1 font-mono group-hover:text-sky-500 transition-colors duration-300">
+        {number.toLocaleString()}
       </span>
-      <span className="text-xs font-semibold text-white/40 uppercase tracking-[0.2em] group-hover:text-white/70 transition-colors">
+      <span className="text-[10px] font-semibold text-[#71717a] uppercase tracking-[0.2em]">
         {label}
       </span>
     </div>
   )
 }
 
-function CategoryCard({ category }: { category: any }) {
+function CategoryCard({ category }: { category: { name: string; slug: string; count: number } }) {
   const Icon = getCategoryIcon(category.name)
-  
   return (
-    <div className="flex flex-col gap-6 rounded-xl border border-white/10 bg-black hover:border-primary/50 transition-all duration-500 h-full p-6 group relative overflow-hidden">
-      {/* Hover Gradient Effect */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-      
-      {/* Header */}
-      <div className="flex items-center justify-between mb-2 relative z-10">
-        <div className="p-3.5 rounded-xl bg-white/5 border border-white/10 group-hover:bg-primary/10 group-hover:border-primary/30 transition-all duration-300">
-          <Icon className="w-6 h-6 text-white/70 group-hover:text-primary transition-colors" />
+    <Link to={`/browse?category=${encodeURIComponent(category.name)}`}>
+      <div className="bento-card p-5 group h-full flex flex-col gap-4 cursor-pointer">
+        <div className="flex items-center justify-between">
+          <div className="p-2.5 rounded-[4px] bg-sky-50 border border-sky-100 group-hover:border-sky-200 transition-colors">
+            <Icon className="w-5 h-5 text-sky-500" />
+          </div>
+          <span className="text-[11px] font-medium text-[#71717a] bg-[#f1f5f9] border border-black/6 px-2 py-0.5 rounded-[2px]">
+            {category.count} skills
+          </span>
         </div>
-        <span className="inline-flex items-center justify-center rounded-md px-2 py-0.5 text-xs font-medium bg-white/5 text-white/50 border border-white/10 group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/20 transition-all">
-          {category.count} skills
-        </span>
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10">
-        <h3 className="font-semibold text-xl text-white group-hover:text-primary transition-colors mb-1">
-          {category.name}
-        </h3>
-        <p className="text-sm text-white/40 group-hover:text-white/60 transition-colors mb-6">
-          Explore capabilities in {category.name.toLowerCase()}.
-        </p>
-        
-        {/* Mock Action */}
-        <div className="flex flex-wrap gap-2 mt-auto">
-          <Link to={`/browse?category=${encodeURIComponent(category.name)}`}>
-             <span className="inline-flex items-center text-xs font-medium text-white/60 bg-white/5 hover:bg-primary/10 hover:text-primary border border-white/10 hover:border-primary/30 rounded-md px-2.5 py-1.5 transition-all cursor-pointer">
-               Browse Category
-             </span>
-          </Link>
+        <div>
+          <h3 className="font-semibold text-[#09090b] group-hover:text-sky-600 transition-colors mb-1">
+            {category.name}
+          </h3>
+          <p className="text-xs text-[#71717a]">
+            Explore capabilities in {category.name.toLowerCase()}.
+          </p>
+        </div>
+        <div className="mt-auto flex items-center gap-1 text-xs text-sky-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+          Browse <ArrowRight className="w-3 h-3" />
         </div>
       </div>
-    </div>
+    </Link>
   )
 }

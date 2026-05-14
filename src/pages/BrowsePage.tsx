@@ -1,29 +1,44 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useSkills, useFilteredSkills } from '../hooks/useSkills'
-import { SkillCard } from '../components/SkillCard'
-import { SearchBar } from '../components/SearchBar'
+import { useChaleaSkills, useChaleaFilteredSkills } from '../hooks/useChaleaSkills'
+import { useChaleaBundle } from '../hooks/useChaleaBundle'
+import { useChaleaSemanticSearch } from '../hooks/useChaleaSemanticSearch'
+import { ChaleaSkillCard } from '../components/ChaleaSkillCard'
+import { ChaleaSearchBar } from '../components/ChaleaSearchBar'
+import { ChaleaBundleBar } from '../components/ChaleaBundleBar'
 import { CategoryFilter } from '../components/CategoryFilter'
 import { Pagination } from '../components/Pagination'
 import { SkeletonGrid } from '../components/Loading'
-import { Package, SearchX } from 'lucide-react'
+import { Package, SearchX, Sparkles, Loader2 } from 'lucide-react'
 
-const ITEMS_PER_PAGE = 18 
+const ITEMS_PER_PAGE = 18
 
 export function BrowsePage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const { skills, categories, loading } = useSkills()
+  const { skills, categories, loading } = useChaleaSkills()
+  const bundle = useChaleaBundle()
 
-  const initialQuery = searchParams.get('q') || ''
+  const initialQuery    = searchParams.get('q') || ''
   const initialCategory = searchParams.get('category') || ''
 
-  const [searchQuery, setSearchQuery] = useState(initialQuery)
+  const [searchQuery, setSearchQuery]           = useState(initialQuery)
   const [selectedCategories, setSelectedCategories] = useState<string[]>(
     initialCategory ? [initialCategory] : []
   )
   const [currentPage, setCurrentPage] = useState(1)
+  const [filterKey, setFilterKey]     = useState(0)
 
-  // Update URL when search changes
+  // Restore bundle from URL on mount
+  useEffect(() => {
+    const bundleParam = searchParams.get('bundle')
+    if (bundleParam) {
+      bundleParam.split(',').filter(Boolean).forEach(slug => {
+        if (!bundle.isSelected(slug)) bundle.toggle(slug)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   useEffect(() => {
     const params = new URLSearchParams()
     if (searchQuery) params.set('q', searchQuery)
@@ -31,43 +46,77 @@ export function BrowsePage() {
     setSearchParams(params, { replace: true })
   }, [searchQuery, selectedCategories, setSearchParams])
 
-  const filteredSkills = useFilteredSkills(skills, searchQuery, selectedCategories)
+  // Text-filtered candidates (always computed)
+  const textFiltered = useChaleaFilteredSkills(skills, searchQuery, selectedCategories)
 
-  // Reset to page 1 when filters change
+  // Semantic search hook — candidates are text-filtered so we narrow API payload
+  const semantic = useChaleaSemanticSearch(textFiltered)
+
+  // Trigger semantic search whenever query or candidates change
+  useEffect(() => {
+    if (semantic.enabled) semantic.search(searchQuery)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchQuery, textFiltered, semantic.enabled])
+
+  // Active result set
+  const activeSkills = (semantic.enabled && semantic.semanticResults)
+    ? semantic.semanticResults
+    : textFiltered
+
   useEffect(() => {
     setCurrentPage(1)
-  }, [searchQuery, selectedCategories])
+    setFilterKey(k => k + 1)
+  }, [searchQuery, selectedCategories, semantic.semanticResults])
 
-  const totalPages = Math.ceil(filteredSkills.length / ITEMS_PER_PAGE)
+  const totalPages = Math.ceil(activeSkills.length / ITEMS_PER_PAGE)
   const paginatedSkills = useMemo(() => {
     const start = (currentPage - 1) * ITEMS_PER_PAGE
-    return filteredSkills.slice(start, start + ITEMS_PER_PAGE)
-  }, [filteredSkills, currentPage])
+    return activeSkills.slice(start, start + ITEMS_PER_PAGE)
+  }, [activeSkills, currentPage])
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
-      
-      {/* Page Header */}
+    <div className="space-y-8 animate-fade-in">
+
       <div>
-        <h1 className="text-3xl md:text-4xl font-bold mb-3 text-white">Browse Skills</h1>
-        <p className="text-white/50 text-lg">
-          Discover and install <span className="text-white">{skills.length.toLocaleString()}</span> AI agent skills
+        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-[#09090b] tracking-tight">Browse Skills</h1>
+        <p className="text-[#71717a] text-base">
+          Discover and install{' '}
+          <span className="text-[#09090b] font-semibold">{skills.length.toLocaleString()}</span>{' '}
+          AI agent skills
         </p>
       </div>
 
-      {/* Search Bar & Mobile Filter */}
-      <div className="flex flex-col md:flex-row gap-4">
+      {/* Search row */}
+      <div className="flex flex-col md:flex-row gap-3">
         <div className="flex-1">
-          <SearchBar
+          <ChaleaSearchBar
             value={searchQuery}
-            onChange={setSearchQuery}
-            placeholder="Search by name, description, or author..."
+            onChange={val => { setSearchQuery(val); if (!val) semantic.reset() }}
+            placeholder={semantic.enabled ? 'Describe what you need...' : 'Search by name, description, or author...'}
           />
         </div>
-        
-        {/* Mobile Filter Button Placeholder (Rendered by CategoryFilter) */}
+
+        {/* Semantic toggle */}
+        {semantic.hasKey && (
+          <button
+            onClick={semantic.toggle}
+            title={semantic.enabled ? 'Disable semantic search' : 'Enable AI semantic search'}
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-[4px] border text-sm font-semibold transition-all whitespace-nowrap ${
+              semantic.enabled
+                ? 'bg-sky-50 border-sky-300 text-sky-600 shadow-[0_0_0_3px_rgba(82,170,167,0.10)]'
+                : 'bg-white border-black/8 text-[#71717a] hover:border-sky-300 hover:text-sky-600'
+            }`}
+          >
+            {semantic.loading
+              ? <Loader2 className="w-4 h-4 animate-spin" />
+              : <Sparkles className="w-4 h-4" />
+            }
+            <span>Semantic</span>
+          </button>
+        )}
+
         <div className="md:hidden">
-           <CategoryFilter
+          <CategoryFilter
             categories={categories}
             selected={selectedCategories}
             onChange={setSelectedCategories}
@@ -75,26 +124,45 @@ export function BrowsePage() {
         </div>
       </div>
 
+      {/* Semantic mode banner */}
+      {semantic.enabled && (
+        <div className={`flex items-center gap-3 px-4 py-2.5 rounded-[4px] border text-xs ${
+          semantic.error
+            ? 'bg-red-50 border-red-200 text-red-600'
+            : 'bg-sky-50 border-sky-200 text-sky-700'
+        }`}>
+          <Sparkles className="w-3.5 h-3.5 shrink-0" />
+          {semantic.error ? (
+            <span>{semantic.error}</span>
+          ) : semantic.loading ? (
+            <span>Re-ranking results with Voyage AI…</span>
+          ) : semantic.semanticResults ? (
+            <span>
+              Showing <strong>{semantic.semanticResults.length}</strong> semantically relevant results
+              for <em>"{semantic.lastQuery}"</em> — powered by Voyage AI
+            </span>
+          ) : (
+            <span>Semantic mode on — type a query to rank results by meaning, not just keywords</span>
+          )}
+        </div>
+      )}
+
       <div className="flex gap-8 items-start">
-        {/* Desktop Sidebar Filter */}
         <div className="hidden md:block">
-           <CategoryFilter
+          <CategoryFilter
             categories={categories}
             selected={selectedCategories}
             onChange={setSelectedCategories}
           />
         </div>
 
-        {/* Main Grid Content */}
         <div className="flex-1 min-w-0">
-          
-          {/* Results Count & Clear */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 text-white/50 text-sm">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2 text-[#71717a] text-sm">
               <Package className="w-4 h-4" />
               <span>
-                {filteredSkills.length.toLocaleString()} skill
-                {filteredSkills.length !== 1 ? 's' : ''} found
+                {activeSkills.length.toLocaleString()} skill
+                {activeSkills.length !== 1 ? 's' : ''} found
               </span>
             </div>
             {(searchQuery || selectedCategories.length > 0) && (
@@ -102,43 +170,50 @@ export function BrowsePage() {
                 onClick={() => {
                   setSearchQuery('')
                   setSelectedCategories([])
+                  semantic.reset()
                 }}
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-sky-600 hover:underline font-medium"
               >
                 Clear filters
               </button>
             )}
           </div>
 
-          {/* Grid */}
           {loading ? (
             <SkeletonGrid count={9} />
-          ) : filteredSkills.length === 0 ? (
-            <div className="text-center py-24 border border-dashed border-white/10 rounded-xl bg-white/5">
-              <SearchX className="w-16 h-16 text-white/20 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2 text-white">No skills found</h3>
-              <p className="text-white/40 mb-6 max-w-sm mx-auto">
-                We couldn't find any skills matching your criteria. Try adjusting your search.
+          ) : activeSkills.length === 0 && !semantic.loading ? (
+            <div className="text-center py-20 border border-dashed border-black/8 rounded-[6px] bg-white/60">
+              <SearchX className="w-12 h-12 text-black/20 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-[#09090b]">No skills found</h3>
+              <p className="text-[#71717a] mb-6 max-w-sm mx-auto text-sm">
+                Try adjusting your search or clearing the filters.
               </p>
               <button
-                onClick={() => {
-                  setSearchQuery('')
-                  setSelectedCategories([])
-                }}
-                className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-colors"
+                onClick={() => { setSearchQuery(''); setSelectedCategories([]); semantic.reset() }}
+                className="btn-ghost text-xs py-2"
               >
                 Clear all filters
               </button>
             </div>
+          ) : semantic.loading ? (
+            <SkeletonGrid count={9} />
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-12">
-                {paginatedSkills.map(skill => (
-                  <SkillCard key={skill.id} skill={skill} />
+              <div key={filterKey} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 mb-10">
+                {paginatedSkills.map((skill, i) => (
+                  <div
+                    key={skill.id}
+                    className="animate-card-enter"
+                    style={{ animationDelay: `${Math.min(i * 35, 350)}ms` }}
+                  >
+                    <ChaleaSkillCard
+                      skill={skill}
+                      bundleSelected={bundle.isSelected(skill.slug)}
+                      onBundleToggle={bundle.toggle}
+                    />
+                  </div>
                 ))}
               </div>
-
-              {/* Pagination */}
               {totalPages > 1 && (
                 <Pagination
                   currentPage={currentPage}
@@ -150,6 +225,15 @@ export function BrowsePage() {
           )}
         </div>
       </div>
+
+      <ChaleaBundleBar
+        selected={bundle.selected}
+        skills={skills}
+        buildCommand={bundle.buildCommand}
+        shareUrl={bundle.shareUrl}
+        onClear={bundle.clear}
+        onRemove={bundle.toggle}
+      />
     </div>
   )
 }

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-import { AppLayout } from './components/AppLayout' 
+import { ChaleaAppLayout } from './components/AppLayout'
+import { ChaleaSplash } from './components/ChaleaSplash'
 import { HomePage } from './pages/HomePage'
 import { BrowsePage } from './pages/BrowsePage'
 import { SkillDetailPage } from './pages/SkillDetailPage'
@@ -12,11 +13,10 @@ import { LoginPage } from './pages/LoginPage'
 import { RegisterPage } from './pages/RegisterPage'
 import { BookmarksPage } from './pages/BookmarksPage'
 import { AuthCallbackPage } from './pages/AuthCallbackPage'
-import { TerminalSplash } from './components/TerminalSplash'
 
 function AppContent() {
   return (
-    <AppLayout>
+    <ChaleaAppLayout>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/browse" element={<BrowsePage />} />
@@ -29,30 +29,22 @@ function AppContent() {
         <Route path="/bookmarks" element={<BookmarksPage />} />
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
       </Routes>
-    </AppLayout>
+    </ChaleaAppLayout>
   )
 }
 
 function App() {
-  const [showSplash, setShowSplash] = useState(() => {
-    return !sessionStorage.getItem('splashShown');
-  });
-
-  const handleSplashComplete = () => {
-    sessionStorage.setItem('splashShown', 'true');
-    setShowSplash(false);
-  };
+  const [splashDone, setSplashDone] = useState(false)
 
   return (
-    <BrowserRouter>
-      {showSplash ? (
-        <TerminalSplash onComplete={handleSplashComplete} />
-      ) : (
+    <>
+      {!splashDone && <ChaleaSplash onDone={() => setSplashDone(true)} />}
+      <BrowserRouter>
         <AuthProvider>
           <AppContent />
         </AuthProvider>
-      )}
-    </BrowserRouter>
+      </BrowserRouter>
+    </>
   )
 }
 
