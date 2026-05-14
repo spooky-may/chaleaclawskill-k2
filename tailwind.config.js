@@ -12,18 +12,42 @@ module.exports = {
       colors: {
         primary: 'hsl(var(--primary))',
         accent: 'hsl(var(--accent))',
-        crimson: '#dc2626',
-        page: '#050505',
+        // Remapped to mascot sage-teal palette (from the eyes).
+        // All existing sky-* classes in components adopt this without file changes.
+        sky: {
+          50:  '#f0f8f8',
+          100: '#d9efee',
+          200: '#b0dedd',
+          300: '#84cbc9',
+          400: '#61b8b5',
+          500: '#52aaa7',   // primary — muted sage-teal from mascot eyes
+          600: '#3d9794',
+          700: '#2d7b78',
+          800: '#1f5e5c',
+          900: '#144140',
+        },
+        silver: {
+          50:  '#f5f5f8',
+          100: '#eaeaef',
+          200: '#d4d4e0',
+          300: '#b8bcd0',   // lavender-silver from robe
+          400: '#9fa3bc',
+          500: '#8589a8',
+        },
+        page: '#f3f4f7',
+      },
+      fontFamily: {
+        sans: ['IBM Plex Sans', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
         'scan': 'scan 3s linear infinite',
         'float': 'float 8s ease-in-out infinite',
         'float-slow': 'float 15s ease-in-out infinite',
         'drift': 'drift 18s linear infinite',
-        'glitch': 'glitch 0.25s cubic-bezier(.25,.46,.45,.94) infinite',
-        'shiver': 'shiver 0.15s infinite',
-        'zip': 'zip 0.5s linear infinite',
         'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'shimmer': 'shimmer 3s linear infinite',
+        'fade-in': 'fade-in 0.4s cubic-bezier(0.16,1,0.3,1) both',
       },
       keyframes: {
         scan: {
@@ -39,21 +63,13 @@ module.exports = {
           '0%': { transform: 'translateX(-100%)' },
           '100%': { transform: 'translateX(250%)' },
         },
-        zip: {
-          '0%': { transform: 'translateX(-100%) scaleX(0)', opacity: '0' },
-          '50%': { transform: 'translateX(50%) scaleX(1)', opacity: '1' },
-          '100%': { transform: 'translateX(200%) scaleX(0)', opacity: '0' },
+        shimmer: {
+          '0%': { backgroundPosition: '200% center' },
+          '100%': { backgroundPosition: '-200% center' },
         },
-        shiver: {
-          '0%, 100%': { transform: 'translate(0)' },
-          '50%': { transform: 'translate(-2px, 2px)' },
-        },
-        glitch: {
-          '0%': { clipPath: 'inset(10% 0 30% 0)', transform: 'translate(-8px)', filter: 'hue-rotate(90deg)' },
-          '20%': { clipPath: 'inset(50% 0 10% 0)', transform: 'translate(8px)', filter: 'none' },
-          '40%': { clipPath: 'inset(20% 0 60% 0)', transform: 'translate(-8px)', filter: 'hue-rotate(-90deg)' },
-          '60%': { clipPath: 'inset(70% 0 5% 0)', transform: 'translate(8px)' },
-          '100%': { clipPath: 'inset(10% 0 30% 0)', transform: 'translate(0)' },
+        'fade-in': {
+          from: { opacity: '0', transform: 'translateY(8px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
         },
       },
     },

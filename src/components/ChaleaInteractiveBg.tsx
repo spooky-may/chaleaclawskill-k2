@@ -1,5 +1,35 @@
 import { useEffect, useRef } from 'react'
 
+// Seeded LCG — deterministic pseudo-random, no Math.random on render
+function makeLCG(seed: number) {
+  let s = seed
+  return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 0x100000000 }
+}
+const _r = makeLCG(0x6f1a3c5d)
+
+const SPAWN_COLORS = [
+  'rgba(82,170,167,0.72)',
+  'rgba(196,194,216,0.78)',
+  'rgba(255,255,255,0.85)',
+  'rgba(132,203,201,0.68)',
+  'rgba(82,170,167,0.55)',
+  'rgba(196,194,216,0.60)',
+]
+
+const SPAWN_DOTS = Array.from({ length: 55 }, (_, i) => {
+  const size = +(_r() * 3.8 + 1.2).toFixed(2)
+  return {
+    id:    `sp${i}`,
+    left:  +(_r() * 93 + 3.5).toFixed(1),
+    top:   +(_r() * 87 + 6.5).toFixed(1),
+    size,
+    color: SPAWN_COLORS[Math.floor(_r() * SPAWN_COLORS.length)],
+    delay: +(_r() * 22).toFixed(1),
+    dur:   +(_r() * 13 + 7).toFixed(1),
+    glow:  size > 3.5 ? 10 : size > 2.5 ? 7 : 4,
+  }
+})
+
 // Rising magic dust — deterministic, no Math.random on render
 const RISING = [
   { id: 0,  size: 3,   left: 7,  delay: 0,    dur: 18, type: 'teal'   },
@@ -21,14 +51,18 @@ const RISING = [
 
 // Firefly twinklers — float at fixed positions, pulse like spirits
 const FIREFLIES = [
-  { id: 'f0', size: 3.5, left: 12, top: 28, delay: 0,   dur: 6,  color: 'rgba(82,170,167,0.80)'  },
-  { id: 'f1', size: 2.5, left: 38, top: 55, delay: 1.8, dur: 8,  color: 'rgba(196,194,216,0.90)' },
-  { id: 'f2', size: 4,   left: 62, top: 18, delay: 3.2, dur: 7,  color: 'rgba(82,170,167,0.70)'  },
-  { id: 'f3', size: 2,   left: 80, top: 42, delay: 0.6, dur: 9,  color: 'rgba(196,194,216,0.80)' },
-  { id: 'f4', size: 3,   left: 22, top: 72, delay: 4.5, dur: 6,  color: 'rgba(255,255,255,0.85)' },
-  { id: 'f5', size: 2.5, left: 55, top: 85, delay: 2.1, dur: 10, color: 'rgba(82,170,167,0.65)'  },
-  { id: 'f6', size: 3.5, left: 90, top: 20, delay: 5.8, dur: 7,  color: 'rgba(196,194,216,0.75)' },
-  { id: 'f7', size: 2,   left: 48, top: 35, delay: 1.2, dur: 8,  color: 'rgba(255,255,255,0.80)' },
+  { id: 'f0',  size: 3.5, left: 12, top: 28, delay: 0,   dur: 6,  color: 'rgba(82,170,167,0.85)'  },
+  { id: 'f1',  size: 2.5, left: 38, top: 55, delay: 1.8, dur: 8,  color: 'rgba(196,194,216,0.92)' },
+  { id: 'f2',  size: 4,   left: 62, top: 18, delay: 3.2, dur: 7,  color: 'rgba(82,170,167,0.78)'  },
+  { id: 'f3',  size: 2,   left: 80, top: 42, delay: 0.6, dur: 9,  color: 'rgba(196,194,216,0.85)' },
+  { id: 'f4',  size: 3,   left: 22, top: 72, delay: 4.5, dur: 6,  color: 'rgba(255,255,255,0.90)' },
+  { id: 'f5',  size: 2.5, left: 55, top: 85, delay: 2.1, dur: 10, color: 'rgba(82,170,167,0.72)'  },
+  { id: 'f6',  size: 3.5, left: 90, top: 20, delay: 5.8, dur: 7,  color: 'rgba(196,194,216,0.80)' },
+  { id: 'f7',  size: 2,   left: 48, top: 35, delay: 1.2, dur: 8,  color: 'rgba(255,255,255,0.85)' },
+  { id: 'f8',  size: 4.5, left: 6,  top: 60, delay: 7.2, dur: 6,  color: 'rgba(82,170,167,0.80)'  },
+  { id: 'f9',  size: 2,   left: 72, top: 75, delay: 3.8, dur: 9,  color: 'rgba(196,194,216,0.88)' },
+  { id: 'f10', size: 3,   left: 30, top: 10, delay: 6.1, dur: 7,  color: 'rgba(132,203,201,0.78)' },
+  { id: 'f11', size: 2.5, left: 92, top: 50, delay: 0.9, dur: 11, color: 'rgba(255,255,255,0.82)' },
 ] as const
 
 // Shimmer rings — concentric expanding circles (anime magic circle hint)
@@ -213,6 +247,24 @@ export function ChaleaInteractiveBg() {
             left:   `${p.left}%`,
             animationDelay:    `${p.delay}s`,
             animationDuration: `${p.dur}s`,
+          }}
+        />
+      ))}
+
+      {/* ── Spawn constellation — dots pop in/out at random coordinates ─ */}
+      {SPAWN_DOTS.map(d => (
+        <div
+          key={d.id}
+          style={{
+            position:   'absolute',
+            width:      d.size,
+            height:     d.size,
+            left:       `${d.left}%`,
+            top:        `${d.top}%`,
+            borderRadius: '50%',
+            background: d.color,
+            boxShadow:  `0 0 ${d.glow}px ${d.color}`,
+            animation:  `dot-spawn ${d.dur}s ease-in-out ${d.delay}s infinite`,
           }}
         />
       ))}

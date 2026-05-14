@@ -285,3 +285,38 @@
   70%  { opacity: 0.12; }
   100% { transform: scale(1.6);  opacity: 0;    }
 }
+
+/* ── Dashboard spawn-constellation dot ────────────────────────────────────── */
+@keyframes dot-spawn {
+  0%   { transform: scale(0);    opacity: 0;    }
+  10%  { transform: scale(1.6);  opacity: 1;    }
+  20%  { transform: scale(1.0);  opacity: 0.9;  }
+  72%  { transform: scale(1.0);  opacity: 0.85; }
+  100% { transform: scale(0);    opacity: 0;    }
+}
+
+/* ── Hero mascot orbital dot pop-in ──────────────────────────────────────── */
+@keyframes dot-hero-enter {
+  from { opacity: 0; transform: scale(0) rotate(-25deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg);   }
+}
+
+/* ── Hero mascot water ripple — stone in water ───────────────────────────── */
+@keyframes ripple-hero {
+  0%   { transform: scale(1.0); opacity: 0.45; }
+  50%  { opacity: 0.15; }
+  100% { transform: scale(2.3); opacity: 0;    }
+}
+
+/* ── Border edge dot — persistent glowing pulse ─────────────────────────── */
+@keyframes border-dot-glow {
+  0%, 100% { transform: scale(0.60); opacity: 0.50; }
+  40%       { transform: scale(1.35); opacity: 1.00; }
+  70%       { transform: scale(0.90); opacity: 0.80; }
+}
+
+/* ── Mascot frame aura — breathing glow on the border layers ────────────── */
+@keyframes border-aura {
+  0%, 100% { opacity: 0.50; transform: scale(1.000); }
+  50%       { opacity: 0.95; transform: scale(1.022); }
+}

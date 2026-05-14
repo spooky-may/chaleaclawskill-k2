@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Github, Code, Globe, Zap } from 'lucide-react'
 import { useChaleaSkills } from '../hooks/useChaleaSkills'
+import { ChaleaHeroOrbit } from '../components/ChaleaHeroOrbit'
 
 export function HomePage() {
   const { skills, categories } = useChaleaSkills()
@@ -78,8 +79,28 @@ export function HomePage() {
           {/* Right: Mascot */}
           <div className="flex justify-center md:justify-end animate-fade-in" style={{ animationDelay: '200ms' }}>
             <div className="relative">
+              {/* Orbital constellation + water ripple */}
+              <ChaleaHeroOrbit />
               {/* Outer ambient glow — teal from the eyes */}
               <div className="absolute -inset-4 bg-sky-500/10 rounded-[12px] blur-[32px]" />
+              {/* Aura blur layer — soft diffused glow, breathing */}
+              <div
+                className="absolute -inset-[10px] rounded-[14px]"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(82,170,167,0.52), rgba(196,194,216,0.42), rgba(82,170,167,0.52))',
+                  filter: 'blur(10px)',
+                  animation: 'border-aura 3s ease-in-out infinite',
+                }}
+              />
+              {/* Sharp glowing border line — crisp edge with halo */}
+              <div
+                className="absolute -inset-[4px] rounded-[11px]"
+                style={{
+                  border: '1.5px solid rgba(82,170,167,0.65)',
+                  boxShadow: '0 0 12px rgba(82,170,167,0.40), 0 0 24px rgba(82,170,167,0.16), inset 0 0 6px rgba(82,170,167,0.10)',
+                  animation: 'border-aura 3s ease-in-out 1.5s infinite',
+                }}
+              />
               {/* Silver-lavender decorative ring */}
               <div className="absolute -inset-[3px] rounded-[10px] bg-gradient-to-br from-sky-300/40 via-[#c4c2d8]/50 to-sky-400/30" />
               {/* Inner white buffer */}

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Danann\\\\1. Projects\\\\1. Web Development\\\\next JS\\\\WP\\\\2026\\\\chaleaclawskill\" | Where-Object { $_.Name -ne \"node_modules\" } | Select-Object Name, LastWriteTime | Sort-Object Name)",
+      "Bash(node scripts/sync-skills.mjs)",
+      "Bash(curl -s \"https://api.github.com/repos/VoltAgent/awesome-openclaw-skills/contents\")",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const j=JSON.parse\\(d\\); j.forEach\\(f=>console.log\\(f.type, f.name\\)\\)\")"
+    ]
+  }
+}

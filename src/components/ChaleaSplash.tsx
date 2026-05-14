@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react'
 
-// --- Orbital dot ring generator (pure math, deterministic) ---
+// --- Orbital dot constellation — non-uniform angles for organic density variation ---
 // Frame is w-28 h-28 = 112px. Center at (56, 56).
-function makeRing(
-  r: number, count: number, angleOffset: number,
-  sizes: readonly number[], colors: readonly string[], delayBase: number,
+function makeDots(
+  r: number,
+  angles: readonly number[],
+  sizes: readonly number[],
+  colors: readonly string[],
+  delayBase: number,
 ) {
-  return Array.from({ length: count }, (_, i) => {
-    const rad = ((360 / count) * i + angleOffset) * (Math.PI / 180)
+  return angles.map((deg, i) => {
+    const rad = deg * (Math.PI / 180)
     const size = sizes[i % sizes.length]
     return {
       id:    `r${r}-${i}`,
@@ -15,8 +18,8 @@ function makeRing(
       top:   56 + r * Math.sin(rad) - size / 2,
       size,
       color: colors[i % colors.length],
-      delay: `${(delayBase + i * 0.10).toFixed(2)}s`,
-      glow:  size > 2.5 ? 5 : 3,
+      delay: `${(delayBase + i * 0.085).toFixed(2)}s`,
+      glow:  size >= 3.5 ? 7 : size >= 2.5 ? 5 : 3,
     }
   })
 }
@@ -25,14 +28,21 @@ const T = 'rgba(82,170,167,0.88)'     // teal
 const S = 'rgba(196,194,216,0.88)'    // silver
 const W = 'rgba(255,255,255,0.92)'    // white
 
-// Three concentric rings: tight (r=82), mid (r=108), outer (r=132)
+// Non-uniform angles — clusters create density variation instead of mechanical rings
+// Inner r=76: dense top-right arc, sparse bottom-left
+const A1 = [3, 18, 36, 54, 76, 100, 128, 162, 198, 232, 268, 302, 326, 348] as const
+// Mid r=106: two dense clusters (top, bottom-left), gaps on right
+const A2 = [8, 22, 40, 58, 74, 90, 110, 130, 152, 170, 188, 208, 225, 244, 260, 278, 298, 318, 338, 354] as const
+// Outer r=134: sparse, mixed large/small for depth
+const A3 = [6, 28, 55, 82, 118, 162, 200, 234, 268, 298, 326, 350] as const
+// Far accent r=158: 7 sparse glints
+const A4 = [32, 86, 142, 188, 244, 300, 352] as const
+
 const ORBITAL_DOTS = [
-  // Inner ring — 12 dots, r=82, every 30°
-  ...makeRing(82,  12, 0,  [2.5, 2, 3, 2, 2.5, 2],    [T, S, T, W, S, T], 0),
-  // Mid ring   — 16 dots, r=108, every 22.5°, offset 11°
-  ...makeRing(108, 16, 11, [1.5, 2, 1.5, 2.5, 1.5, 2], [S, T, W, S, T, W], 0.30),
-  // Outer ring — 10 dots, r=132, every 36°, offset 6°
-  ...makeRing(132, 10, 6,  [1.5, 2, 1.5, 2, 1.5],      [T, W, S, T, S],    0.55),
+  ...makeDots(76,  A1, [1.5, 2.5, 1.5, 3.5, 2, 1, 3, 1.5, 2.5, 1, 4, 2, 1.5, 3],   [T,S,T,W,S,T,T,S,W,T,S,T,T,W],           0),
+  ...makeDots(106, A2, [1, 2, 1.5, 2.5, 1, 1.5, 2, 1, 3, 1.5, 2, 1, 2.5, 1.5, 1, 2, 1.5, 4, 1, 2], [S,T,W,S,T,W,T,S,T,W,S,T,W,T,S,W,T,S,T,W], 0.25),
+  ...makeDots(134, A3, [2, 1, 3.5, 1.5, 2.5, 1, 5, 2, 1.5, 3.5, 1.5, 2.5],           [T,W,T,S,T,W,S,T,W,T,S,T],                0.50),
+  ...makeDots(158, A4, [1.5, 2.5, 1, 3, 1.5, 2, 1],                                   [S,T,W,T,S,W,T],                           0.72),
 ]
 
 interface ChaleaSplashProps {
