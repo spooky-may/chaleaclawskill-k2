@@ -1,0 +1,18 @@
+{
+  "name": "Chalea Clawskill",
+  "short_name": "Chalea",
+  "description": "Browse and install OpenClaw skills for AI agents.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f4f7",
+  "theme_color": "#52aaa7",
+  "icons": [
+    {
+      "src": "/mascot.jpeg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}
