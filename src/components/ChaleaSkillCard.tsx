@@ -4,6 +4,7 @@ import { useState } from 'react'
 import type { Skill } from '../lib/types'
 import { useAuth } from '../context/AuthContext'
 import { useChaleaBookmarks } from '../hooks/useChaleaBookmarks'
+import { useChaleaToast } from '../hooks/useChaleaToast'
 import { ChaleaSkillDrawer } from './ChaleaSkillDrawer'
 
 interface ChaleaSkillCardProps {
@@ -23,14 +24,20 @@ export function ChaleaSkillCard({
   const [drawerOpen, setDrawerOpen] = useState(false)
   const { user } = useAuth()
   const { isBookmarked, toggleBookmark } = useChaleaBookmarks()
+  const toast = useChaleaToast()
   const bookmarked = isBookmarked(skill.id)
 
   const copyCommand = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    await navigator.clipboard.writeText(skill.install_command)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(skill.install_command)
+      setCopied(true)
+      toast.push(`Copied install command for ${skill.name}`, 'success')
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast.push('Could not access clipboard', 'error')
+    }
   }
 
   const handleBookmark = async (e: React.MouseEvent) => {
