@@ -19,6 +19,7 @@ import { useChaleaBookmarks } from '../hooks/useChaleaBookmarks'
 import { useChaleaSkillContent } from '../hooks/useChaleaSkillContent'
 import { ChaleaReviewSection } from '../components/ChaleaReviewSection'
 import { ChaleaMarkdownSkeleton } from '../components/ChaleaMarkdownSkeleton'
+import { ChaleaTestDrive } from '../components/ChaleaTestDrive'
 import { LoadingSpinner } from '../components/Loading'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -278,6 +279,9 @@ export function SkillDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Test Drive — ask Chalea about this skill */}
+          <ChaleaTestDrive skill={skill} />
 
           {/* Metadata */}
           <div className="bento-card p-5">

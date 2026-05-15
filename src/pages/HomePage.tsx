@@ -3,8 +3,13 @@ import { ArrowRight, Github, Code, Globe, Zap } from 'lucide-react'
 import { useChaleaSkills } from '../hooks/useChaleaSkills'
 import { ChaleaHeroOrbit } from '../components/ChaleaHeroOrbit'
 
+const HERO_PILLS = ['Semantic search', 'One-click install', 'Loadout bundles', 'Community reviews']
+const TRUST = ['Open source', 'No signup to browse', 'MIT licensed']
+
 export function HomePage() {
   const { skills, categories } = useChaleaSkills()
+
+  const skillCount = skills.length > 0 ? skills.length.toLocaleString() : '6,000'
 
   const stats = [
     { label: 'Skills', value: skills.length > 0 ? skills.length.toLocaleString() : '6000+' },
@@ -15,39 +20,54 @@ export function HomePage() {
   return (
     <div className="space-y-20 pb-12">
 
-      {/* Hero — 2-column layout */}
-      <section className="relative pt-10 md:pt-16 max-w-5xl mx-auto px-4">
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-sky-500/8 blur-[80px] rounded-full pointer-events-none -z-10" />
+      {/* Hero — 2-column, mascot bleeds into the page */}
+      <section className="relative pt-8 md:pt-14 max-w-6xl mx-auto px-4">
+        {/* soft ambient wash behind the whole hero */}
+        <div className="absolute top-1/3 right-[8%] -translate-y-1/2 w-[560px] h-[420px] bg-[radial-gradient(ellipse,_rgba(82,170,167,0.14)_0%,_transparent_70%)] blur-[40px] pointer-events-none -z-10" />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-[1.05fr_0.95fr] gap-8 md:gap-6 items-center">
           {/* Left: CTA */}
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] bg-sky-50 border border-sky-200 text-xs font-semibold text-sky-600 mb-6 animate-fade-in uppercase tracking-wide">
+          <div className="order-2 md:order-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[2px] bg-white border border-sky-200 text-[11px] font-semibold text-sky-600 mb-7 animate-fade-in uppercase tracking-[0.12em]">
               <span className="flex h-1.5 w-1.5 relative">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-sky-500" />
               </span>
-              v2.0 Live
+              Live · {skillCount} skills indexed
             </div>
 
             <h1
-              className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#09090b] mb-5 animate-fade-in leading-[1.1]"
-              style={{ animationDelay: '100ms' }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#09090b] mb-6 animate-fade-in leading-[1.05]"
+              style={{ animationDelay: '80ms' }}
             >
-              Orchestrate your{' '}
-              <span className="text-sky-500">Digital Workforce</span>
+              Your agent&apos;s
+              <br />
+              <span className="text-[#a1a1aa]">skill</span> library
+              <br />
+              <span className="text-sky-500">for OpenClaw.</span>
             </h1>
 
             <p
-              className="text-base md:text-lg text-[#71717a] max-w-md mb-8 leading-relaxed animate-fade-in"
-              style={{ animationDelay: '200ms' }}
+              className="text-base md:text-lg text-[#71717a] max-w-md mb-7 leading-relaxed animate-fade-in"
+              style={{ animationDelay: '160ms' }}
             >
-              The complete ecosystem for AI coding agents. Access{' '}
-              <span className="text-[#09090b] font-semibold">
-                {skills.length > 0 ? `${skills.length.toLocaleString()}+` : '6000+'}
-              </span>{' '}
-              OpenClaw skills and automate complex workflows with a single command.
+              Chalea is the front door to the OpenClaw ecosystem. Browse{' '}
+              <span className="text-[#09090b] font-semibold">{skillCount}+</span>{' '}
+              skills, preview their docs, and install with one command. Full catalog, zero setup.
             </p>
+
+            {/* Feature pills */}
+            <div
+              className="flex flex-wrap gap-x-5 gap-y-2 mb-8 animate-fade-in"
+              style={{ animationDelay: '220ms' }}
+            >
+              {HERO_PILLS.map((p) => (
+                <span key={p} className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#71717a]">
+                  <span className="w-1 h-1 rounded-full bg-sky-500" />
+                  {p}
+                </span>
+              ))}
+            </div>
 
             <div
               className="flex flex-col sm:flex-row gap-3 animate-fade-in"
@@ -67,57 +87,52 @@ export function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-6 animate-fade-in" style={{ animationDelay: '400ms' }}>
-              <p className="text-xs text-[#71717a] mb-1.5 uppercase tracking-wide font-medium">Quick install</p>
-              <div className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-black/8 rounded-[4px]">
-                <span className="text-[#71717a] font-mono text-xs select-none">$</span>
-                <code className="font-mono text-xs text-[#09090b]">npx clawhub@latest install &lt;skill&gt;</code>
-              </div>
+            {/* Trust row */}
+            <div
+              className="flex flex-wrap items-center gap-x-5 gap-y-1 mt-7 animate-fade-in"
+              style={{ animationDelay: '380ms' }}
+            >
+              {TRUST.map((t) => (
+                <span key={t} className="inline-flex items-center gap-1.5 text-xs text-[#71717a]">
+                  <svg viewBox="0 0 12 12" className="w-3 h-3 text-sky-500" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M2.5 6.5L5 9l4.5-5.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  {t}
+                </span>
+              ))}
             </div>
           </div>
 
-          {/* Right: Mascot */}
-          <div className="flex justify-center md:justify-end animate-fade-in" style={{ animationDelay: '200ms' }}>
-            <div className="relative">
-              {/* Orbital constellation + water ripple */}
-              <ChaleaHeroOrbit />
-              {/* Outer ambient glow — teal from the eyes */}
-              <div className="absolute -inset-4 bg-sky-500/10 rounded-[12px] blur-[32px]" />
-              {/* Aura blur layer — soft diffused glow, breathing */}
-              <div
-                className="absolute -inset-[10px] rounded-[14px]"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(82,170,167,0.52), rgba(196,194,216,0.42), rgba(82,170,167,0.52))',
-                  filter: 'blur(10px)',
-                  animation: 'border-aura 3s ease-in-out infinite',
-                }}
-              />
-              {/* Sharp glowing border line — crisp edge with halo */}
-              <div
-                className="absolute -inset-[4px] rounded-[11px]"
-                style={{
-                  border: '1.5px solid rgba(82,170,167,0.65)',
-                  boxShadow: '0 0 12px rgba(82,170,167,0.40), 0 0 24px rgba(82,170,167,0.16), inset 0 0 6px rgba(82,170,167,0.10)',
-                  animation: 'border-aura 3s ease-in-out 1.5s infinite',
-                }}
-              />
-              {/* Silver-lavender decorative ring */}
-              <div className="absolute -inset-[3px] rounded-[10px] bg-gradient-to-br from-sky-300/40 via-[#c4c2d8]/50 to-sky-400/30" />
-              {/* Inner white buffer */}
-              <div className="absolute -inset-[1px] rounded-[9px] bg-[#f3f4f7]" />
-              {/* Mascot image */}
-              <img
-                src="/mascot.jpeg"
-                alt="Chalea mascot"
-                className="relative w-64 h-64 md:w-80 md:h-80 object-cover rounded-[8px]"
-                style={{ boxShadow: '0 8px 40px rgba(82,170,167,0.18), 0 2px 8px rgba(0,0,0,0.08)' }}
-              />
-              {/* Crab motif corner accent */}
-              <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-[4px] bg-white border border-sky-200 flex items-center justify-center shadow-sm"
-                   style={{ boxShadow: '0 0 12px rgba(82,170,167,0.25)' }}>
-                <span className="text-sm">🦀</span>
-              </div>
-            </div>
+          {/* Right: large transparent mascot, bleeding off the bottom */}
+          <div
+            className="order-1 md:order-2 relative flex justify-center md:justify-end items-end animate-fade-in self-stretch"
+            style={{ animationDelay: '120ms' }}
+          >
+            {/* breathing teal halo, well behind the mascot */}
+            <div
+              className="absolute inset-0 -z-10"
+              style={{
+                background:
+                  'radial-gradient(circle at 55% 45%, rgba(82,170,167,0.22) 0%, rgba(196,194,216,0.11) 45%, transparent 70%)',
+                filter: 'blur(44px)',
+                animation: 'border-aura 4s ease-in-out infinite',
+              }}
+            />
+
+            {/* Glowing orbital constellation behind the mascot */}
+            <ChaleaHeroOrbit />
+
+            <img
+              src="/mascot_transparant.png"
+              alt="Chalea mascot"
+              className="relative z-10 w-[22rem] sm:w-[28rem] md:w-[34rem] lg:w-[40rem] xl:w-[44rem] h-auto select-none pointer-events-none"
+              style={{
+                // Image is large enough to bleed off the section bottom —
+                // fade only the bottom edge so the crop reads as intentional.
+                WebkitMaskImage: 'linear-gradient(to bottom, #000 78%, transparent 100%)',
+                maskImage: 'linear-gradient(to bottom, #000 78%, transparent 100%)',
+              }}
+            />
           </div>
         </div>
       </section>
